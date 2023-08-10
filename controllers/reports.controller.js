@@ -40,6 +40,19 @@ exports.passboxOc2 = async (req, res) => {
     return res.status(500).json({ error: e.message });
   }
 };
+exports.passboxOc1 = async (req, res) => {
+  try {
+    const response = await reports.findAll({
+      where: { supplier_name: "OC1" },
+    });
+
+    res.status(200).json(response);
+
+    // });
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
+};
 exports.passboxOc2ByLot = async (req, res) => {
   try {
     const { lot } = req.params;
@@ -93,6 +106,24 @@ exports.tps = async (req, res) => {
   try {
     const response = await reports.findAll({
       where: { supplier_name: { [Op.not]: ["OC2", "OC1"] } },
+    });
+
+    res.status(200).json(response);
+
+    // });
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
+};
+exports.tpsByLotLine = async (req, res) => {
+  try {
+    const { lot, line } = req.params;
+    const response = await reports.findAll({
+      where: {
+        supplier_name: { [Op.not]: ["OC2", "OC1"] },
+        global_variable_1: lot,
+        line_name: line,
+      },
     });
 
     res.status(200).json(response);
