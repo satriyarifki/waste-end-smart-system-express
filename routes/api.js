@@ -13,5 +13,7 @@ router.get("/reports/group/passbox-oc2", reportController.groupPassboxOc2);
 // TPS
 router.get("/reports/tps", reportController.tps);
 router.get("/reports/tps/:line/:lot", reportController.tpsByLotLine);
+//Approval
+router.post("/reports/approved", reportController.updateToApproved);
 
 module.exports = router;

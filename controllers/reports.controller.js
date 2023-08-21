@@ -77,6 +77,12 @@ exports.groupPassboxOc2 = async (req, res) => {
         "global_variable_1",
         "product_name",
         [Sequelize.fn("COUNT", Sequelize.col("*")), "count_bag"],
+        [
+          Sequelize.literal(
+            `CASE WHEN COUNT(*) = COUNT(shift_remark) THEN MIN(shift_remark) END`
+          ),
+          "approval",
+        ],
       ],
       where: { supplier_name: "OC2" },
       group: "global_variable_1",
@@ -125,6 +131,28 @@ exports.tpsByLotLine = async (req, res) => {
         line_name: line,
       },
     });
+
+    res.status(200).json(response);
+
+    // });
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
+};
+
+exports.updateToApproved = async (req, res) => {
+  try {
+    const { lot } = req.params;
+    console.log(req.body);
+    const response = await reports.update(
+      { shift_remark: "1" },
+      {
+        where: {
+          global_variable_1: req.body.lot,
+        },
+      }
+    );
+    console.log(response);
 
     res.status(200).json(response);
 
