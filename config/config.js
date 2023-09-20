@@ -10,7 +10,7 @@ module.exports = {
   prisma_log: {
     username: "iot_prod",
     password: "123456",
-    database: "prisma_log_lite",
+    database: "prisma_log_amerta",
     host: "192.168.9.47",
     port: "3306",
     dialect: "mysql",

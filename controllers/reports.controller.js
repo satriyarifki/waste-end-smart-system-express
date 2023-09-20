@@ -53,12 +53,12 @@ exports.passboxOc1 = async (req, res) => {
     return res.status(500).json({ error: e.message });
   }
 };
-exports.passboxOc2ByLot = async (req, res) => {
+exports.passboxByLot = async (req, res) => {
   try {
-    const { lot } = req.params;
+    const { line,lot } = req.params;
     const response = await reports.findAll({
       where: {
-        [Op.and]: [{ supplier_name: "OC2" }, { global_variable_1: lot }],
+        [Op.and]: [{ supplier_name: line }, { global_variable_2: lot }],
       },
     });
     // const emp = await connectEmploye.query('SELECT * FROM `aio_employee`.`mst_employment` LIMIT 20) ', { type: QueryTypes.SELECT });
@@ -68,13 +68,13 @@ exports.passboxOc2ByLot = async (req, res) => {
     return res.status(500).json({ error: e.message });
   }
 };
-exports.groupPassboxOc2 = async (req, res) => {
+exports.groupPassbox = async (req, res) => {
   try {
     const response = await reports.findAll({
       attributes: [
         "created_at",
         "line_name",
-        "global_variable_1",
+        "global_variable_2",
         "product_name",
         [Sequelize.fn("COUNT", Sequelize.col("*")), "count_bag"],
         [
@@ -84,8 +84,8 @@ exports.groupPassboxOc2 = async (req, res) => {
           "approval",
         ],
       ],
-      where: { supplier_name: "OC2" },
-      group: "global_variable_1",
+      where: { supplier_name: "OC2", supplier_name: "OC1" },
+      group: "global_variable_2",
     });
 
     res.status(200).json(response);
