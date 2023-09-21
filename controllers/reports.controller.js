@@ -1,6 +1,6 @@
 const { Sequelize, QueryTypes } = require("sequelize");
 const { connectPrismaLog } = require("../config/connections");
-const { reports } = require("./../models");
+const { reports, sales_view } = require("./../models");
 const Op = Sequelize.Op;
 
 // exports.index = async (req, res) => {
@@ -161,3 +161,5 @@ exports.updateToApproved = async (req, res) => {
     return res.status(500).json({ error: e.message });
   }
 };
+
+

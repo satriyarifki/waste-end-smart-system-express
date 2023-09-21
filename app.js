@@ -8,6 +8,7 @@ const upload = multer();
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var apiRouter = require("./routes/api");
+var salesRouter = require("./routes/sales");
 var authRouter = require("./routes/auth");
 
 var app = express();
@@ -30,6 +31,7 @@ app.use(upload.array());
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/api", apiRouter);
+app.use("/api/sales", salesRouter);
 app.use("/auth", authRouter);
 
 module.exports = app;
