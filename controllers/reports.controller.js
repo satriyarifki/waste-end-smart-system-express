@@ -55,7 +55,7 @@ exports.passboxOc1 = async (req, res) => {
 };
 exports.passboxByLot = async (req, res) => {
   try {
-    const { line,lot } = req.params;
+    const { line, lot } = req.params;
     const response = await reports.findAll({
       where: {
         [Op.and]: [{ supplier_name: line }, { global_variable_2: lot }],
@@ -79,7 +79,7 @@ exports.groupPassbox = async (req, res) => {
         [Sequelize.fn("COUNT", Sequelize.col("*")), "count_bag"],
         [
           Sequelize.literal(
-            `CASE WHEN COUNT(*) = COUNT(shift_remark) THEN MIN(shift_remark) END`
+            `CASE WHEN COUNT(*) = COUNT(approval) THEN MIN(approval) END`
           ),
           "approval",
         ],
@@ -145,10 +145,10 @@ exports.updateToApproved = async (req, res) => {
     const { lot } = req.params;
     console.log(req.body);
     const response = await reports.update(
-      { shift_remark: "1" },
+      { approval: true },
       {
         where: {
-          global_variable_1: req.body.lot,
+          global_variable_2: req.body.lot,
         },
       }
     );

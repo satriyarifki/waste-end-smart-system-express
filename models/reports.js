@@ -37,6 +37,10 @@ module.exports = function (sequelize, DataTypes) {
         type: DataTypes.STRING(255),
         allowNull: true,
       },
+      global_variable_3: {
+        type: DataTypes.STRING(255),
+        allowNull: true,
+      },
       customer_code: {
         type: DataTypes.STRING(255),
         allowNull: true,
@@ -166,7 +170,15 @@ module.exports = function (sequelize, DataTypes) {
         type: DataTypes.TEXT,
         allowNull: true,
       },
+      application_id: {
+        type: DataTypes.STRING(10),
+        allowNull: true,
+      },
       is_force: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true,
+      },
+      approval: {
         type: DataTypes.BOOLEAN,
         allowNull: true,
       },
