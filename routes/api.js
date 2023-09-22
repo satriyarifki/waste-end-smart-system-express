@@ -1,6 +1,8 @@
 var express = require("express");
 var router = express.Router();
 const reportController = require("./../controllers/reports.controller");
+const vendorController = require("./../controllers/vendor.controller");
+const priceController = require("./../controllers/prices.controller");
 
 /* GET users listing. */
 // REPORTS
@@ -15,5 +17,9 @@ router.get("/reports/tps", reportController.tps);
 router.get("/reports/tps/:line/:lot", reportController.tpsByLotLine);
 //Approval
 router.post("/reports/approved", reportController.updateToApproved);
+//Vendor
+router.get("/vendor", vendorController.index);
+//Vendor
+router.get("/price", priceController.index);
 
 module.exports = router;
