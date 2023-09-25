@@ -37,6 +37,17 @@ exports.index = async (req, res) => {
     return res.status(500).json({ error: e.message });
   }
 };
+exports.store = async (req, res) => {
+  try {
+    const response = await sales.create(req.body);
+
+    res.status(200).json(response);
+
+    // });
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
+};
 exports.sales_by_id = async (req, res) => {
   try {
     const { id } = req.params;

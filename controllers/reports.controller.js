@@ -139,6 +139,61 @@ exports.tpsByLotLine = async (req, res) => {
     return res.status(500).json({ error: e.message });
   }
 };
+exports.tpsOnSales = async (req, res) => {
+  try {
+    const response = await reports.findAll({
+      where: { line_name: "TPS", customer_code: { [Op.like]: "V%" } },
+    });
+
+    res.status(200).json(response);
+
+    // });
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
+};
+exports.tpsSalesByDate = async (req, res) => {
+  try {
+    const { date } = req.params;
+    const response = await reports.findAll({
+      where: {
+        line_name: "TPS",
+        customer_code: { [Op.like]: "V%" },
+        global_variable_2: date,
+      },
+    });
+
+    res.status(200).json(response);
+
+    // });
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
+};
+exports.tpsSalesGroupByDate = async (req, res) => {
+  try {
+    const response = await reports.findAll({
+      attributes: [
+        "created_at",
+        "line_name",
+        "global_variable_2",
+        "customer_name",
+        [Sequelize.fn("COUNT", Sequelize.col("*")), "count"],
+        [Sequelize.fn("SUM", Sequelize.col("netto")), "total_qty"],
+        [Sequelize.fn("SUM", Sequelize.col("global_variable_1")), "total_bag"],
+        "unit",
+      ],
+      where: { line_name: "TPS", customer_code: { [Op.like]: "V%" } },
+      group: "global_variable_2",
+    });
+
+    res.status(200).json(response);
+
+    // });
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
+};
 
 exports.updateToApproved = async (req, res) => {
   try {
@@ -161,5 +216,3 @@ exports.updateToApproved = async (req, res) => {
     return res.status(500).json({ error: e.message });
   }
 };
-
-
