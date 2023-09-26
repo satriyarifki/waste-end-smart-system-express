@@ -30,7 +30,8 @@ exports.index = async (req, res) => {
 exports.passboxOc2 = async (req, res) => {
   try {
     const response = await reports.findAll({
-      where: { supplier_name: "OC2" },
+      where: { supplier_name: "OC2", line_name: "OC2" },
+      order: [["created_at", "DESC"]],
     });
 
     res.status(200).json(response);
@@ -43,7 +44,8 @@ exports.passboxOc2 = async (req, res) => {
 exports.passboxOc1 = async (req, res) => {
   try {
     const response = await reports.findAll({
-      where: { supplier_name: "OC1" },
+      where: { supplier_name: "OC1", line_name: "OC1" },
+      order: [["created_at", "DESC"]],
     });
 
     res.status(200).json(response);
@@ -84,8 +86,8 @@ exports.groupPassbox = async (req, res) => {
           "approval",
         ],
       ],
-      where: { supplier_name: "OC2", supplier_name: "OC1" },
-      group: "global_variable_2",
+      where: { supplier_name: { [Op.or]: ["OC2", "OC1"] } },
+      group: ["global_variable_2", "line_name"],
     });
 
     res.status(200).json(response);
@@ -95,19 +97,7 @@ exports.groupPassbox = async (req, res) => {
     return res.status(500).json({ error: e.message });
   }
 };
-exports.passboxOc1 = async (req, res) => {
-  try {
-    const response = await reports.findAll({
-      where: { supplier_name: "OC1" },
-    });
 
-    res.status(200).json(response);
-
-    // });
-  } catch (e) {
-    return res.status(500).json({ error: e.message });
-  }
-};
 exports.tps = async (req, res) => {
   try {
     const response = await reports.findAll({
@@ -127,7 +117,7 @@ exports.tpsByLotLine = async (req, res) => {
     const response = await reports.findAll({
       where: {
         supplier_name: { [Op.not]: ["OC2", "OC1"] },
-        global_variable_1: lot,
+        global_variable_2: lot,
         line_name: line,
       },
     });
