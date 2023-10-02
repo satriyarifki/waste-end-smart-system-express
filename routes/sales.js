@@ -6,6 +6,8 @@ router.get("/view", salesController.index_view);
 router.get("/view/:id", salesController.sales_view_by_id);
 router.get("", salesController.index);
 router.post("", salesController.store);
-router.get("/:id", salesController.sales_by_id);
+router.get("/byid/:id", salesController.sales_by_id);
+router.get("/yearly", salesController.sales_yearly);
+router.get("/monthly", salesController.sales_monthly);
 
 module.exports = router;
