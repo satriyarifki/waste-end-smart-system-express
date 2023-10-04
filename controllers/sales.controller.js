@@ -77,6 +77,40 @@ exports.big_five_sales_ytd = async (req, res) => {
     return res.status(500).json({ error: e.message });
   }
 };
+exports.sales_category_between_date = async (req, res) => {
+  try {
+    const { from, to } = req.params;
+    const response = await sales_price_view.findAll({
+      attributes: [
+        [sequelize.fn("SUM", sequelize.col("preform")), "preform"],
+        [sequelize.fn("SUM", sequelize.col("botol_plastik")), "botol_plastik"],
+        [sequelize.fn("SUM", sequelize.col("balok")), "balok"],
+        [sequelize.fn("SUM", sequelize.col("karton")), "karton"],
+        [sequelize.fn("SUM", sequelize.col("sak_kecil")), "sak_kecil"],
+        [sequelize.fn("SUM", sequelize.col("resin")), "resin"],
+        [sequelize.fn("SUM", sequelize.col("sak_besar")), "sak_besar"],
+        [sequelize.fn("SUM", sequelize.col("besi")), "besi"],
+        [sequelize.fn("SUM", sequelize.col("drum")), "drum"],
+        [sequelize.fn("SUM", sequelize.col("pallet_kayu")), "pallet_kayu"],
+        [
+          sequelize.fn("SUM", sequelize.col("pallet_plastik")),
+          "pallet_plastik",
+        ],
+      ],
+      where: {
+        date: {
+          [Op.between]: [from, to],
+        },
+      },
+    });
+
+    res.status(200).json(response[0]);
+
+    // });
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
+};
 exports.store = async (req, res) => {
   try {
     const response = await sales.create(req.body);
@@ -107,6 +141,7 @@ exports.sales_yearly = async (req, res) => {
         [sequelize.fn("YEAR", sequelize.col("date")), "year"],
         [sequelize.fn("SUM", sequelize.col("preform")), "preform"],
         [sequelize.fn("SUM", sequelize.col("botol_plastik")), "botol_plastik"],
+        [sequelize.fn("SUM", sequelize.col("besi")), "besi"],
         [sequelize.fn("SUM", sequelize.col("resin")), "resin"],
         [sequelize.fn("SUM", sequelize.col("balok")), "balok"],
         [sequelize.fn("SUM", sequelize.col("karton")), "karton"],
@@ -123,9 +158,7 @@ exports.sales_yearly = async (req, res) => {
         [Sequelize.fn("SUM", Sequelize.col("total_price")), "sum_total"],
       ],
       group: [sequelize.fn("YEAR", sequelize.col("date"))],
-      order: [
-        ["year", "DESC"],
-      ],
+      order: [["year", "DESC"]],
     });
 
     res.status(200).json(response);
