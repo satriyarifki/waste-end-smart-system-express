@@ -1,6 +1,11 @@
 const { Sequelize, QueryTypes } = require("sequelize");
 const { connectPrismaLog } = require("../config/connections");
-const { sales_view, sales, sequelize } = require("./../models");
+const {
+  sales_view,
+  sales,
+  sales_price_view,
+  sequelize,
+} = require("./../models");
 const Op = Sequelize.Op;
 
 exports.index_view = async (req, res) => {
@@ -31,6 +36,41 @@ exports.index = async (req, res) => {
     const response = await sales.findAll();
 
     res.status(200).json(response);
+
+    // });
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
+};
+exports.index_price_view = async (req, res) => {
+  try {
+    const response = await sales_price_view.findAll();
+
+    res.status(200).json(response);
+
+    // });
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
+};
+exports.big_five_sales_ytd = async (req, res) => {
+  try {
+    const response = await sales_price_view.findAll({
+      attributes: [
+        [sequelize.fn("SUM", sequelize.col("preform")), "preform"],
+        [sequelize.fn("SUM", sequelize.col("botol_plastik")), "botol_plastik"],
+        [sequelize.fn("SUM", sequelize.col("balok")), "balok"],
+        [sequelize.fn("SUM", sequelize.col("karton")), "karton"],
+        [sequelize.fn("SUM", sequelize.col("sak_kecil")), "sak_kecil"],
+      ],
+      where: sequelize.where(
+        sequelize.fn("YEAR", sequelize.col("date")),
+        new Date().getFullYear()
+      ),
+      group: [sequelize.fn("YEAR", sequelize.col("date"))],
+    });
+
+    res.status(200).json(response[0]);
 
     // });
   } catch (e) {
@@ -83,6 +123,9 @@ exports.sales_yearly = async (req, res) => {
         [Sequelize.fn("SUM", Sequelize.col("total_price")), "sum_total"],
       ],
       group: [sequelize.fn("YEAR", sequelize.col("date"))],
+      order: [
+        ["year", "DESC"],
+      ],
     });
 
     res.status(200).json(response);

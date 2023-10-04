@@ -4,6 +4,8 @@ const salesController = require("./../controllers/sales.controller");
 
 router.get("/view", salesController.index_view);
 router.get("/view/:id", salesController.sales_view_by_id);
+router.get("/price-view", salesController.index_price_view);
+router.get("/big-five", salesController.big_five_sales_ytd);
 router.get("", salesController.index);
 router.post("", salesController.store);
 router.get("/byid/:id", salesController.sales_by_id);
