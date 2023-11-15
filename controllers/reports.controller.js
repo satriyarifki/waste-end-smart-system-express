@@ -70,6 +70,21 @@ exports.passboxByLot = async (req, res) => {
     return res.status(500).json({ error: e.message });
   }
 };
+exports.passboxByApp = async (req, res) => {
+  try {
+    const { app } = req.params;
+    const response = await reports.findAll({
+      where: {
+        [Op.and]: [{ application_id: app }, {line_name: app}],
+      },
+    });
+    // const emp = await connectEmploye.query('SELECT * FROM `aio_employee`.`mst_employment` LIMIT 20) ', { type: QueryTypes.SELECT });
+
+    res.status(200).json(response);
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
+};
 exports.groupPassbox = async (req, res) => {
   try {
     const response = await reports.findAll({
