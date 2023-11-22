@@ -111,6 +111,39 @@ exports.sales_category_between_date = async (req, res) => {
     return res.status(500).json({ error: e.message });
   }
 };
+exports.sales_category_year = async (req, res) => {
+  try {
+    const { year } = req.params;
+    const response = await sales_price_view.findAll({
+      attributes: [
+        [sequelize.fn("SUM", sequelize.col("preform")), "preform"],
+        [sequelize.fn("SUM", sequelize.col("botol_plastik")), "botol_plastik"],
+        [sequelize.fn("SUM", sequelize.col("balok")), "balok"],
+        [sequelize.fn("SUM", sequelize.col("karton")), "karton"],
+        [sequelize.fn("SUM", sequelize.col("sak_kecil")), "sak_kecil"],
+        [sequelize.fn("SUM", sequelize.col("resin")), "resin"],
+        [sequelize.fn("SUM", sequelize.col("sak_besar")), "sak_besar"],
+        [sequelize.fn("SUM", sequelize.col("besi")), "besi"],
+        [sequelize.fn("SUM", sequelize.col("drum")), "drum"],
+        [sequelize.fn("SUM", sequelize.col("pallet_kayu")), "pallet_kayu"],
+        [
+          sequelize.fn("SUM", sequelize.col("pallet_plastik")),
+          "pallet_plastik",
+        ],
+      ],
+      where: {
+        date: sequelize.where(sequelize.fn('year', sequelize.col('date')), year),
+
+      },
+    });
+
+    res.status(200).json(response[0]);
+
+    // });
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
+};
 exports.store = async (req, res) => {
   try {
     const response = await sales.create(req.body);
