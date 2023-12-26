@@ -74,6 +74,7 @@ exports.big_five_sales_ytd = async (req, res) => {
 
     // });
   } catch (e) {
+    console.log(e);
     return res.status(500).json({ error: e.message });
   }
 };
@@ -108,6 +109,7 @@ exports.sales_category_between_date = async (req, res) => {
 
     // });
   } catch (e) {
+    console.log(e);
     return res.status(500).json({ error: e.message });
   }
 };
@@ -198,6 +200,7 @@ exports.sales_yearly = async (req, res) => {
 
     // });
   } catch (e) {
+    console.log(e);
     return res.status(500).json({ error: e.message });
   }
 };

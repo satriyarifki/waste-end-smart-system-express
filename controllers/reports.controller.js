@@ -175,6 +175,30 @@ exports.tpsSalesByDate = async (req, res) => {
     return res.status(500).json({ error: e.message });
   }
 };
+exports.tpsSalesGroupByProduct = async (req, res) => {
+  try {
+    const { date } = req.params;
+    const response = await reports.findAll({
+      attributes: [
+        "product_name",
+        [Sequelize.fn("SUM", Sequelize.col("netto")), "total_qty"],
+        "unit"
+      ],
+      where: {
+        line_name: "TPS",
+        customer_code: { [Op.like]: "V%" },
+        global_variable_2: date,
+      },
+      group: ["product_code"],
+    });
+
+    res.status(200).json(response);
+
+    // });
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
+};
 exports.tpsSalesGroupByDate = async (req, res) => {
   try {
     const response = await reports.findAll({
@@ -186,10 +210,13 @@ exports.tpsSalesGroupByDate = async (req, res) => {
         [Sequelize.fn("COUNT", Sequelize.col("*")), "count"],
         [Sequelize.fn("SUM", Sequelize.col("netto")), "total_qty"],
         [Sequelize.fn("SUM", Sequelize.col("global_variable_1")), "total_bag"],
+        [Sequelize.literal('COUNT(DISTINCT(product_code))'), 'jenis_qty'],
         "unit",
       ],
       where: { line_name: "TPS", customer_code: { [Op.like]: "V%" } },
-      group: "global_variable_2",
+      group: ["global_variable_2"],
+      order: [["created_at", "DESC"]],
+      
     });
 
     res.status(200).json(response);
