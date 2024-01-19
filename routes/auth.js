@@ -12,5 +12,6 @@ router.get("/employees/kejayan", employeeController.employeeKejayan);
 
 // Auth
 router.post("/login", authController.login);
+router.get("/log", authController.log);
 
 module.exports = router;
