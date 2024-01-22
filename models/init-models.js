@@ -1,12 +1,12 @@
 var DataTypes = require("sequelize").DataTypes;
-var _v_login_aio = require("./v_login_aio");
+var _customers = require("./customers");
 
 function initModels(sequelize) {
-  var v_login_aio = _v_login_aio(sequelize, DataTypes);
+  var customers = _customers(sequelize, DataTypes);
 
 
   return {
-    v_login_aio,
+    customers,
   };
 }
 module.exports = initModels;

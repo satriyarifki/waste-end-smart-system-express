@@ -248,3 +248,40 @@ exports.updateToApproved = async (req, res) => {
     return res.status(500).json({ error: e.message });
   }
 };
+
+exports.store = async (req, res) => {
+  try {
+    const response = await reports.create(req.body);
+
+    res.status(200).json(response);
+
+    // });
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
+};
+exports.update = async (req, res) => {
+  try {
+    
+    const report = await reports.findByPk(req.body.id)
+
+    const response = await report.update({
+    global_variable_1: req.body.global_variable_1,
+    global_variable_2: req.body. global_variable_2,
+    global_variable_3: req.body.global_variable_3,
+    line_code: req.body.line_code,
+    line_name: req.body.line_name,
+    netto: req.body.netto,
+    gross: req.body.gross,
+    supplier_code: req.body.supplier_code,
+    supplier_name: req.body.supplier_name,
+    product_code: req.body.product_code,
+    product_name: req.body.product_name,});
+
+    res.status(200).json(response);
+
+    // });
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
+};
