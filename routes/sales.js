@@ -13,5 +13,6 @@ router.post("", salesController.store);
 router.get("/byid/:id", salesController.sales_by_id);
 router.get("/yearly", salesController.sales_yearly);
 router.get("/monthly", salesController.sales_monthly);
+router.delete("/:id", salesController.delete);
 
 module.exports = router;

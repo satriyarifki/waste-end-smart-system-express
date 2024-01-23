@@ -244,3 +244,29 @@ exports.sales_monthly = async (req, res) => {
     return res.status(500).json({ error: e.message });
   }
 };
+exports.delete = async (req, res) => {
+  try {
+    const id = req.params.id;
+    let data = await sales.findOne({
+      where: {
+        id: id,
+      },
+    });
+
+    if (!data) {
+      res.status(203).json({ message:"Data is not found!"});
+    }
+
+    await sales.destroy({
+      where: {
+        id: id,
+      },
+    });
+
+    res.status(200).json({ message: "Data was deleted!" });
+
+    // });
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
+};
