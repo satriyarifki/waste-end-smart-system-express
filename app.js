@@ -10,6 +10,7 @@ var usersRouter = require("./routes/users");
 var apiRouter = require("./routes/api");
 var salesRouter = require("./routes/sales");
 var authRouter = require("./routes/auth");
+var writeoffRouter = require("./routes/writeoff");
 
 var app = express();
 
@@ -33,5 +34,6 @@ app.use("/users", usersRouter);
 app.use("/api", apiRouter);
 app.use("/api/sales", salesRouter);
 app.use("/auth", authRouter);
+app.use("/api/write-off", writeoffRouter);
 
 module.exports = app;
