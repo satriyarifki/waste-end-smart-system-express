@@ -1,22 +1,10 @@
 const { Sequelize, QueryTypes } = require("sequelize");
+const fs = require('fs');
 const {
   write_off
 } = require("../models");
 const Op = Sequelize.Op;
-multer = require("multer");
 
-const PATH = "./public/uploads";
-let storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, PATH);
-  },
-  filename: (req, file, cb) => {
-    cb(null, file.fieldname + "-" + Date.now());
-  },
-});
-let upload = multer({
-  storage: storage,
-}).single('files');
 
 exports.index = async (req, res) => {
     try {
@@ -26,6 +14,22 @@ exports.index = async (req, res) => {
   
       // });
     } catch (e) {
+      return res.status(500).json({ error: e.message });
+    }
+  };
+exports.getPicture = async (req, res) => {
+    try {
+      const {id} = req.params
+      const path = __dirname.slice(0,49)+'public\\uploads\\writeoff\\'+ id
+      // const fileContent = fs.readFileSync(path);
+      // console.log(path);
+      res.setHeader('Content-Type', 'image/jpeg');
+    // res.setHeader('Content-Disposition', `inline; filename="${picture}"`);
+      res.sendFile(path)
+      // res.status(200).json(fileContent);
+      // });
+    } catch (e) {
+      console.log(e.message);
       return res.status(500).json({ error: e.message });
     }
   };
@@ -43,10 +47,17 @@ exports.store = async (req, res) => {
 exports.update = async (req, res) => {
     try {
       const body = req.body
+      
       if(body.asset == undefined){
-        console.log(body);
-        console.log(body.picture);
-        console.log(req.file);
+        if (req.file.path == undefined) {
+          // console.log('o');
+          body.picture = req.file.path
+          write_off.update(body, { fields: ['received','picture','note'], where: {id :body.id}})
+        }else {
+          write_off.update(body, { fields: ['received','note'], where: {id :body.id}})
+
+        }
+
         
       }
   
