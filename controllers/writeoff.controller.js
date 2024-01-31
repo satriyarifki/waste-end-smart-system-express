@@ -75,3 +75,30 @@ exports.update = async (req, res) => {
       return res.status(500).json({ error: e.message });
     }
   };
+
+  exports.delete = async (req, res) => {
+    try {
+      const id = req.params.id;
+      let data = await write_off.findOne({
+        where: {
+          id: id,
+        },
+      });
+  
+      if (!data) {
+        res.status(203).json({ message:"Data is not found!"});
+      }
+  
+      await write_off.destroy({
+        where: {
+          id: id,
+        },
+      });
+  
+      res.status(200).json({ message: "Data was deleted!" });
+  
+      // });
+    } catch (e) {
+      return res.status(500).json({ error: e.message });
+    }
+  };
