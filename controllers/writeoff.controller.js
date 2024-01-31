@@ -8,7 +8,7 @@ const Op = Sequelize.Op;
 
 exports.index = async (req, res) => {
     try {
-      const response = await write_off.findAll();
+      const response = await write_off.findAll({order: [['year','DESC'], ['quartal','ASC']]});
   
       res.status(200).json(response);
   
@@ -35,10 +35,20 @@ exports.getPicture = async (req, res) => {
   };
 exports.store = async (req, res) => {
     try {
-      const response = await write_off.create(req.body);
+      
+      if (Array.isArray(req.body)) {
+        for (const item of req.body) {
+          // console.log(item);
+          await write_off.create(item);
+        }
+        res.status(200).json('Store Success');
+      } else {
+        const response = await write_off.create(req.body);
+        res.status(200).json(response);
+        
+      }
   
-      res.status(200).json(response);
-  
+      
       // });
     } catch (e) {
       return res.status(500).json({ error: e.message });
@@ -47,21 +57,18 @@ exports.store = async (req, res) => {
 exports.update = async (req, res) => {
     try {
       const body = req.body
-      
       if(body.asset == undefined){
-        if (req.file.path == undefined) {
-          // console.log('o');
+        if (req.file != undefined) {
           body.picture = req.file.path
           write_off.update(body, { fields: ['received','picture','note'], where: {id :body.id}})
         }else {
           write_off.update(body, { fields: ['received','note'], where: {id :body.id}})
-
-        }
-
-        
+        } 
+      } else {
+        write_off.update(body, { where: {id :body.id}})
       }
   
-      res.status(200).json(body);
+      res.status(200).json({message: 'Update Success!'});
   
       // });
     } catch (e) {
