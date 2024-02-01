@@ -66,7 +66,7 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.CHAR(1),
       allowNull: true
     },
-    lg_aktif: {
+    status: {
       type: DataTypes.CHAR(1),
       allowNull: true
     },

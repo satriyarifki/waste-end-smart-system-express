@@ -3,7 +3,7 @@ var crypto = require("crypto-js");
 const jwt = require("jsonwebtoken");
 const { Sequelize, QueryTypes } = require("sequelize");
 const { connectEmployee } = require("../config/connections");
-const { v_login_aio } = require("../models");
+const { v_login_aio, v_login_user } = require("../models");
 
 exports.login = async (req, res) => {
   try {
@@ -14,7 +14,7 @@ exports.login = async (req, res) => {
     //   "(SELECT b.lg_nik, b.lg_password, b.lg_name, b.lg_email_aio, b.lg_aktif AS `status`, b.n_photo, b.lg_location FROM aio_employee.php_ms_login b WHERE b.lg_nik = $nik) UNION (SELECT b.lg_nik, b.lg_password, b.lg_name, NULL as lg_email_aio, b.lg_aktif AS `status`, NULL as n_photo, b.lg_location FROM aio_employee.php_ms_login_os b WHERE b.lg_nik = $nik ) LIMIT 1",
     //   { bind: { nik: nik }, type: QueryTypes.SELECT }
     // );
-    const user = await v_login_aio.findAll({attributes: {exclude: ['id']}, where:{lg_nik: nik}});
+    const user = await v_login_user.findAll({attributes: {exclude: ['id']}, where:{lg_nik: nik}});
     // const c = { data: 0 };
     // if (hash == user[0].lg_password) {
     //   c.data = 2;
@@ -50,7 +50,7 @@ exports.login = async (req, res) => {
 
 exports.log = async (req, res) => {
   try {
-    const response = await v_login_aio.findAll({attributes: {exclude: ['id']}, where:{lg_nik: '18180'}});
+    const response = await v_login_user.findAll({attributes: {exclude: ['id']}, where:{lg_nik: '18180'}});
 
     res.status(200).json(response);
 

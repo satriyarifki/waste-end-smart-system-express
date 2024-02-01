@@ -62,6 +62,15 @@ exports.big_five_sales_ytd = async (req, res) => {
         [sequelize.fn("SUM", sequelize.col("balok")), "balok"],
         [sequelize.fn("SUM", sequelize.col("karton")), "karton"],
         [sequelize.fn("SUM", sequelize.col("sak_kecil")), "sak_kecil"],
+        [sequelize.fn("SUM", sequelize.col("resin")), "resin"],
+        [sequelize.fn("SUM", sequelize.col("sak_besar")), "sak_besar"],
+        [sequelize.fn("SUM", sequelize.col("besi")), "besi"],
+        [sequelize.fn("SUM", sequelize.col("drum")), "drum"],
+        [sequelize.fn("SUM", sequelize.col("pallet_kayu")), "pallet_kayu"],
+        [
+          sequelize.fn("SUM", sequelize.col("pallet_plastik")),
+          "pallet_plastik",
+        ],
       ],
       where: sequelize.where(
         sequelize.fn("YEAR", sequelize.col("date")),
